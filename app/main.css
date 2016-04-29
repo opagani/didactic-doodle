@@ -1,0 +1,10 @@
+/* app/main.css */
+:root {
+  --red: #ff0000;
+  --large: 10px;
+}
+
+p {
+  color: var(--red);
+  padding: var(--large);
+}
