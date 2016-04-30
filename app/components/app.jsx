@@ -1,5 +1,18 @@
 import React from 'react'
 
-const App = () => <p>Welcome to the App!</p>
+import { Col, Grid , Row } from 'react-bootstrap'
+
+import Header from './header.jsx'
+
+const App = () => <div>
+  <Header />
+  <Grid>
+    <Row>
+      <Col xs={12}>
+        <p>Welcome to the App!</p>
+      </Col>
+    </Row>
+  </Grid>     
+</div>
 
 export default App
