@@ -1,9 +1,11 @@
-// webpack.config.babel.js
-//import merge from 'webpack-merge'
-//import path from 'path'
-const path = require('path')
+import path from 'path'
+import webpack from 'webpack'
+import merge from 'webpack-merge'
+import stylelint from 'stylelint'
+
+/* const path = require('path')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+const merge = require('webpack-merge') */
 
 const TARGET = process.env.npm_lifecycle_event
 
@@ -25,8 +27,19 @@ const common = {
     path: PATHS.build,
     filename: 'app.js'
   },
+  externals: { // See https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md
+    'jsdom': 'window',
+    'react/lib/ReactContext': 'window',
+    'react/lib/ExecutionEnvironment': true,
+    'react/addons': true
+  },
   module: {
     preLoaders: [
+      {
+        test: /\.css$/,
+        loaders: [ 'postcss' ],
+        include: PATHS.app
+      },
       {
         test: /\.jsx?$/,
         loaders: [ 'eslint' ],
@@ -35,28 +48,55 @@ const common = {
     ],
     loaders: [
       {
+        test: /\.css$/,
+        loaders: [ 'style', 'css', 'myth' ],
+        include: PATHS.app
+      },
+      {
         test: /\.jsx?$/,
         loaders: [ 'babel?cacheDirectory' ],
         include: PATHS.app
       }
     ]
+  },
+  postcss: function () {
+    return [stylelint({
+      rules: {
+        'color-hex-case': 'lower'
+      }
+    })]
   }
 }
 
-const startConfig = {}
+const startConfig = {
+  devtool: 'eval-source-map',
+  devServer: {
+    contentBase: PATHS.build,
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    stats: 'errors-only',
+    host: process.env.HOST,
+    port: process.env.PORT
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ]
+}
 
 const buildConfig = {}
 
-if (TARGET === 'start' || !TARGET) {
+/* if (TARGET === 'start' || !TARGET) {
   module.exports = merge(common, {})
 }
 
 if (TARGET === 'build') {
   module.exports = merge(common, {})
-}
+} */
 
-//const config = (TARGET === 'start' || !TARGET)
-  //? merge(common, startConfig)
-  //: merge(common, buildConfig)
+const config = (TARGET === 'start' || !TARGET)
+  ? merge(common, startConfig)
+  : merge(common, buildConfig)
 
-//export default config
+export default config
