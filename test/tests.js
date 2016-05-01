@@ -8,16 +8,15 @@ import chaiEnzyme from 'chai-enzyme'
 
 chai.use(chaiEnzyme())
 
-import { render } from 'enzyme'
+import { shallow } from 'enzyme'
 
 import App from '../app/components/app.jsx'
+import Header from '../app/components/header.jsx'
 
 describe('<App/>', () => {
-  it('displays the welcome message', () => {
-    const wrapper = render(<App />)
+  it('includes the <Header/>', () => {
+    const wrapper = shallow(<App><p/></App>)
 
-    console.log('The App', wrapper, wrapper.text())
-
-    expect(wrapper.text()).to.contain('Welcome')
+    expect(wrapper).to.contain(<Header/>)
   })
 })

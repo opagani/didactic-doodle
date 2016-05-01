@@ -1,18 +1,16 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
-import { Col, Grid , Row } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 
 import Header from './header.jsx'
 
-const App = () => <div>
+const App = ({ children }) => <div>
   <Header />
-  <Grid>
-    <Row>
-      <Col xs={12}>
-        <p>Welcome to the App!</p>
-      </Col>
-    </Row>
-  </Grid>     
+  <Grid>{children}</Grid>
 </div>
+
+App.propTypes = {
+  children: PropTypes.node.isRequired
+}
 
 export default App
